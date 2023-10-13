@@ -1,30 +1,30 @@
 import { createSignal } from "solid-js"
-import solidLogo from "./assets/solid.svg"
-import viteLogo from "/vite.svg"
 
-function App() {
-  const [count, setCount] = createSignal(0)
+export function App() {
+  const [data, setData] = createSignal<Record<string, unknown> | any[]>()
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} class="logo w-8" alt="Vite logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={solidLogo} class="logo solid w-8" alt="Solid logo" />
-        </a>
-      </div>
-      <h1>Vite + Solid</h1>
-      <div class="card">
-        <button onClick={() => setCount(count => count + 1)}>count is {count()}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p class="read-the-docs">Click on the Vite and Solid logos to learn more</p>
+      <h1>JSON Tree Viewer</h1>
+      <p>Simple JSON Viewer that run completely on-client. No data exchange</p>
+
+      <input
+        type="file"
+        name="name"
+        title="title"
+        onInput={e =>
+          e.target.files?.[0].text().then(t => {
+            console.log(t)
+            setData(JSON.parse(t))
+          })
+        }
+      />
+
+      {data() ? (
+        <pre>{JSON.stringify(data(), null, 2)}</pre>
+      ) : (
+        <small>Invalid file. Please load a valid JSON file.</small>
+      )}
     </>
   )
 }
-
-export default App
