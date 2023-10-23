@@ -1,30 +1,29 @@
-import { createSignal } from "solid-js"
+import { Parser01 } from "./parsers/parser01"
+import { Parser02 } from "./parsers/parser02"
+import { Parser03 } from './parsers/parser03'
+import { Parser04 } from './parsers/parser04'
+
+// TODO: if filesize small enough, skip the streaming and just read the whole file
+// TODO: add time taken
+// TODO: add progress indicator
 
 export function App() {
-  const [data, setData] = createSignal<Record<string, unknown> | any[]>()
-
   return (
     <>
       <h1>JSON Tree Viewer</h1>
       <p>Simple JSON Viewer that run completely on-client. No data exchange</p>
 
-      <input
-        type="file"
-        name="name"
-        title="title"
-        onInput={e =>
-          e.target.files?.[0].text().then(t => {
-            console.log(t)
-            setData(JSON.parse(t))
-          })
-        }
-      />
+      <hr class="my-2 border-black" />
+      <Parser01 />
+      <hr class="my-2 border-black" />
+      <Parser02 />
+      <hr class="my-2 border-black" />
+      <Parser03 />
+      <hr class="my-2 border-black" />
+      <Parser04 />
+      <hr class="my-2 border-black" />
 
-      {data() ? (
-        <pre>{JSON.stringify(data(), null, 2)}</pre>
-      ) : (
-        <small>Invalid file. Please load a valid JSON file.</small>
-      )}
+      <div id="section"></div>
     </>
   )
 }
