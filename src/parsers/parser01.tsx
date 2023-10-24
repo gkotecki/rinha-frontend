@@ -1,5 +1,5 @@
 import { For, createSignal } from "solid-js"
-import { Uint8ArrayToStringsTransformer } from '../uint8-to-str'
+import { Uint8ArrayToStringsTransformer } from "../uint8-to-str"
 
 export function Parser01() {
   const [chunks, setChunks] = createSignal<string[]>([])
@@ -11,6 +11,8 @@ export function Parser01() {
         name="name"
         title="title"
         onInput={async e => {
+          const t0 = performance.now()
+
           const file = e.target.files?.item(0)
           if (!file) throw new Error("No file")
 
@@ -23,6 +25,7 @@ export function Parser01() {
 
           let rawChunks = [""]
           let count = 0
+          let buffer = ""
 
           while (true) {
             const { done, value } = await reader.read()
@@ -34,19 +37,21 @@ export function Parser01() {
             // setChunks(c => c.concat(value))
             // rawChunks.push(value)
 
-            if (count > 500) {
-              await new Promise(r => setTimeout(r, 0.0001))
-              count = 0
-            }
+            // if (count > 500) {
+            //   await new Promise(r => setTimeout(r, 0.0001))
+            //   count = 0
+            // }
+            buffer += value
 
-            // Write each string line to the document as a paragraph
-            const el = document.createElement("pre")
-            el.textContent = value
-            document.getElementById("section")!.appendChild(el)
+            // const el = document.createElement("pre")
+            // el.textContent = value
+            // document.getElementById("section")!.appendChild(el)
           }
-          console.warn(rawChunks)
-          setChunks(rawChunks)
-          console.warn("done with:", file.name, `${file.size / 1_000_000} MB`)
+          console.warn(buffer)
+          // setChunks(rawChunks)
+
+          const t1 = performance.now()
+          console.warn( "done with:", file.name, `${file.size / 1_000_000} MB`, `${(t1 - t0) / 1000}s`)
           // setData(full)
         }}
       />

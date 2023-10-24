@@ -1,4 +1,5 @@
 import { JSX, createSignal } from "solid-js"
+import { parseJson } from "../utils/jsonparser"
 
 export function Parser04() {
   const [data, setData] = createSignal<any>()
@@ -14,6 +15,7 @@ export function Parser04() {
     if (!rs) throw new Error("No stream")
 
     const fileSize = file.size
+    // const reader = rs.pipeThrough(new TextDecoderStream()).getReader()
     const reader = rs.getReader()
     const decoder = new TextDecoder()
     let buffer = ""
@@ -27,12 +29,13 @@ export function Parser04() {
       setProgress(Math.min((processedBytes / fileSize) * 100, 99.9))
       console.log("progress", progress())
 
-      const decoded = decoder.decode(value, { stream: true })
-      buffer += decoded
+      const decodedStr = decoder.decode(value, { stream: true })
+      buffer += decodedStr
     }
 
     setProgress(Math.max(progress(), 99))
-    setData(JSON.parse(buffer))
+    // setData(JSON.parse(buffer))
+    setData(parseJson(buffer))
     setProgress(100)
 
     // console.log(data())

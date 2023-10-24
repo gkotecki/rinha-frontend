@@ -20,7 +20,7 @@ export class Uint8ArrayToStringsTransformer {
    * @param {TransformStreamDefaultController} controller The controller to enqueue the transformed chunks to.
    */
   transform(chunk: Uint8Array, controller: TransformStreamDefaultController) {
-    // console.log(`Received chunk %o with %o bytes.`, chunk, chunk.byteLength)
+    console.log(`Received chunk %o with %o bytes.`, chunk, chunk.byteLength)
 
     // Decode the current chunk to string and prepend the last string
     const string = `${this.lastString}${this.decoder.decode(chunk)}`
